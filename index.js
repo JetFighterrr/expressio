@@ -1,4 +1,13 @@
 'use strict';
+//_______________________________________
+//here we have layer of data
+
+let users =   [
+              {first:'Sam', last: 'Bush'},
+              {first:'Stan', last: 'Williams'}
+              ];
+let vmtype = ['client', 'server', 'ws'];
+let vms = [{ name:'0-w10-a6', type: vmtype[2], leasee: users[0]}];
 
 const responseManager = require('./src/responseManager');
 const morgan = require('morgan');
@@ -26,8 +35,8 @@ app.put('/edit',(req,res) => {
 // });
 
 // post create here
-app.post('/create/:name/:busy',(req,res) => {
-  res.status(200).send(create(req.params));
+app.post('/create/:name/:vmtype/:leasee',(req,res) => {
+  res.status(200).send(create(req.params.name,req.params.vmtype,req.params.leasee));
 
 });
 
@@ -49,17 +58,17 @@ function edit(){
   return "edit";
 }
 function read(){
-  return "read"
+  return vms;
 }
 
 function update(){
-  return "update";
+
+  return read();
 }
 
-function create(reqJson){
-  console.log(typeof reqJson.name);
-  console.log(typeof reqJson.busy);
-  return reqJson;
+function create(nameHere, typeHere = vmtype[0], leaseeHere = users[0]){
+  vms.push({name: nameHere, type: typeHere, leasee: leaseeHere});
+  return vms;
 }
 
 function remove() {
@@ -67,5 +76,3 @@ function remove() {
 }
 
 
-//_______________________________________
-//here we have layer of data
